@@ -1,0 +1,16 @@
+<!DOCTYPE suite SYSTEM "https://testng.org/testng-1.0.dtd">
+<suite name="SampleSuite" parallel="false">
+
+    <!-- Define a test -->
+    <test name="SampleTest">
+        <groups>
+            <run>
+                <include name = "smoke" />
+            </run>
+        </groups>
+        <classes>
+            <class name = "PetStore.Pet.PetTests" />
+        </classes>
+    </test>
+
+</suite>

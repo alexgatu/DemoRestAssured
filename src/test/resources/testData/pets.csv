@@ -1,0 +1,5 @@
+id,petName,status,tagId,tagName,categoryId,categoryName
+910, bobitza, sold, 1, mytag, 1, dog
+901, , sold, 1, tag, 1, 
+902, , , 1, , 1, 
+-1, aaa, aaaa, -1, aaaa, -1, aaaa
