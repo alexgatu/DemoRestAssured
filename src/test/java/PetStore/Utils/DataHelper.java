@@ -40,28 +40,38 @@ public class DataHelper {
         return ret;
     }
 
-    public static List<Object[]>readDataFromCsv(String filename) {
-        List<Object[]> records = new ArrayList<>();
+    public static List<String[]>readDataFromCsv(String filename) {
+        List<String[]> records = new ArrayList<>();
         try (InputStream is = Thread.currentThread().getContextClassLoader().getResourceAsStream(filename)) {
-            Reader rd = new InputStreamReader(is);
-            CSVParser csvParser = new CSVParser(rd, CSVFormat.DEFAULT.withFirstRecordAsHeader());
-            for (CSVRecord record : csvParser) {
-                records.add(new Object[] {record.toList().toArray()});
+            if (is == null) {
+                throw new IllegalStateException("CSV not found on classpath: " + filename);
+            }
+            try (
+                    Reader rd = new InputStreamReader(is);
+                    CSVParser parser = CSVFormat.DEFAULT.builder()
+                        .setHeader().setSkipHeaderRecord(true)
+                        .setTrim(true)
+                        .setIgnoreEmptyLines(true)
+                        .setAllowMissingColumnNames(true)
+                        .build()
+                        .parse(rd)) {
+
+                for (CSVRecord rec : parser) {
+                    int n = rec.size();
+                    if (n == 0) continue;
+
+                    String[] row = new String[n];
+                    for (int i = 0; i < n; i++) {
+                        String v = rec.get(i);
+                         row[i] = v;
+                    }
+                    records.add(row);
+                }
             }
         } catch (IOException e) {
-            throw new RuntimeException("Failed to read CSV file: " + filename, e);
+            throw new UncheckedIOException("Failed to read CSV: " + filename, e);
         }
-        System.out.println(Thread.currentThread().getContextClassLoader() + filename);
-        /*
-        try (FileReader fileReader = new FileReader(Thread.currentThread().getContextClassLoader() + filename);
-             CSVParser csvParser = new CSVParser(fileReader, CSVFormat.DEFAULT.withFirstRecordAsHeader())) {
-            for (CSVRecord record : csvParser) {
-                records.add(new Object[] {record.toList()});
-            }
-        } catch (IOException e) {
-            throw new RuntimeException("Failed to read CSV file: " + filename, e);
-        }
-        */
+
         return records;
     }
 

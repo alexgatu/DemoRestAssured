@@ -12,6 +12,7 @@ import org.testng.annotations.Ignore;
 import org.testng.annotations.Test;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
 
@@ -32,21 +33,21 @@ public class PetTests extends BaseTest {
 
     @DataProvider(name="pets2")
     public Iterator<Pet> pets2() {
-        List<Object[]> data = DataHelper.readDataFromCsv("testData/pets.csv");
+        List<String[]> data = DataHelper.readDataFromCsv("testData/pets.csv");
         List<Pet> pets = new ArrayList<>();
-        for (Object[] line : data) {
+        for (String[] line : data) {
             for (Object o : line) {
                 System.out.println(o.toString());
             }
-            System.out.println("column length: " + line.length);
+            System.out.println("column length: " + Arrays.stream(line).toList().size());
             pets.add(DataHelper.generateCustomPet(
                     DataHelper.extractIntegerFromObject(line[0]),
-                    line[1].toString(),
-                    line[2].toString(),
+                    line[1],
+                    line[2],
                     DataHelper.extractIntegerFromObject(line[3]),
-                    line[4].toString(),
+                    line[4],
                     DataHelper.extractIntegerFromObject(line[5]),
-                    line[6].toString()));
+                    line[6]));
         }
         return pets.iterator();
     }
