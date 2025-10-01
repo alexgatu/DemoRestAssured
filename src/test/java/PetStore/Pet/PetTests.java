@@ -36,10 +36,10 @@ public class PetTests extends BaseTest {
         List<String[]> data = DataHelper.readDataFromCsv("testData/pets.csv");
         List<Pet> pets = new ArrayList<>();
         for (String[] line : data) {
-            for (Object o : line) {
-                System.out.println(o.toString());
-            }
-            System.out.println("column length: " + Arrays.stream(line).toList().size());
+//            for (Object o : line) {
+//                System.out.println(o.toString());
+//            }
+//            System.out.println("column length: " + Arrays.stream(line).toList().size());
             pets.add(DataHelper.generateCustomPet(
                     DataHelper.extractIntegerFromObject(line[0]),
                     line[1],
@@ -104,7 +104,7 @@ public class PetTests extends BaseTest {
     @Test(dependsOnMethods="getPet", groups = {"regression"})
     public void deletePet() {
         given()
-                .pathParam("petId", 900)
+                .pathParam("petId", 901)
         .when()
                 .delete("/pet/{petId}")
         .then()
